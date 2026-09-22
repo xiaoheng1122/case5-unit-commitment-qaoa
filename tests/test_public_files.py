@@ -5,15 +5,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_notebook_is_valid_json_and_has_formula_sections():
-    notebook = json.loads((ROOT / "notebooks" / "case5_unit_commitment_workflow.ipynb").read_text(encoding="utf-8"))
-    assert notebook["nbformat"] == 4
-    source = "\n".join("".join(cell.get("source", [])) for cell in notebook["cells"])
-    assert "MILP" in source
-    assert "local_noisy" in source
-    assert "\\sum" in source
-
-
 def test_day_ahead_notebook_is_valid_and_describes_the_24_hour_workflow():
     notebook = json.loads((ROOT / "notebooks" / "case5_day_ahead_workflow.ipynb").read_text(encoding="utf-8"))
     assert notebook["nbformat"] == 4

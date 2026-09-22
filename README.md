@@ -1,21 +1,22 @@
-# Noisy QAOA for IEEE Five-Bus Unit Commitment
+# QAOA-Based Day-Ahead Unit Commitment on the MATPOWER Five-Bus System
 
-This repository is a compact, reproducible study of unit commitment and
-economic dispatch on the MATPOWER five-bus benchmark.  It combines a binary
+This repository is a compact, reproducible study of 24-hour unit commitment
+and economic dispatch on the MATPOWER five-bus benchmark. It combines a binary
 QUBO commitment model, the QAOA implementation used by the QPanda3 ecosystem,
-and a SciPy mixed-integer/linear optimization reference.  An optional OriginQ
+and a SciPy mixed-integer/linear optimization reference. An optional OriginQ
 Runtime FakeBackend path provides a local, finite-shot rehearsal with device
 calibration-derived noise; no real-quantum-processor job is part of this
 project.
 
-The project is intended as a readable example that can be run from a clean
-Python environment and inspected in the accompanying Notebook.
+The primary entry point is the 24-hour day-ahead driver and its accompanying
+Jupyter walkthrough. The compact single-period QUBO and backend APIs remain
+available as reusable building blocks for each hourly subproblem.
 
 ## Model
 
 The MATPOWER `case5` data provide the buses, generators, branch reactances and
-thermal limits.  Five generator commitment variables are used in each of two
-periods, giving ten logical qubits.  For a commitment bit `u_{g,t}`, the
+thermal limits. Five generator commitment variables are used for each
+scheduling period. For a commitment bit `u_{g,t}`, the
 available capacity and demand-reserve requirement are represented by the
 normalized penalty
 
@@ -37,8 +38,9 @@ and the DC branch-flow limits of the five-bus network.  The reference solves
 the commitment and dispatch constraints jointly with
 `scipy.optimize.milp` and evaluates the resulting dispatch with
 `scipy.optimize.linprog` (or `SLSQP` when quadratic generation costs are
-retained).  The QAOA path optimizes the ten-bit commitment distribution and
-passes its most relevant feasible states through the same dispatch routine.
+retained). The day-ahead reference contains 24 periods. Its local QAOA
+comparison solves one five-bit commitment QUBO per hour and evaluates the
+complete trajectory with the same dispatch routine.
 
 ![MATPOWER five-bus topology](figures/case5_topology.svg)
 
@@ -57,7 +59,7 @@ For the OriginQ Runtime rehearsal, `RuntimeFakeBackendRunner` calls
 local FakeBackend execution path and does not create a remote task.  The API
 key is read only from the environment variable selected by the caller; its
 value is never printed, stored, or committed.  A Runtime installation is
-optional and is not needed for the ordinary Notebook or local benchmark.
+optional and is not needed for the ordinary day-ahead Notebook or local study.
 
 ## Installation
 
@@ -73,22 +75,16 @@ The optional Runtime rehearsal additionally needs the OriginQ
 
 ## Quick start
 
-Run the classical reference, ideal state-vector QAOA, and local synthetic-noise
-comparison:
+Run the complete day-ahead study, including the classical reference and the
+state-vector QAOA comparison:
 
 ```powershell
-python scripts\run_local_benchmark.py --output results\latest
+python scripts\run_day_ahead.py --output results\day_ahead
 ```
 
-The command writes `case5_local_benchmark.json` and, when Matplotlib is
-available, `case5_local_cost_comparison.png`.  The included record uses the
-MILP/LP reference cost 28439.31 in the case5 cost units.  QAOA results depend
-on the optimizer iteration limit and random seed; the JSON records both so
-that a run can be reproduced.
-
-Open `notebooks/case5_unit_commitment_workflow.ipynb` for the derivation,
-classical reference, QAOA solution, dispatch comparison, and the offline noisy
-CPUQVM example.
+The command writes a JSON record, a load/dispatch figure, and a per-hour cost
+comparison. The reproducible Notebook walkthrough is
+`notebooks/case5_day_ahead_workflow.ipynb`.
 
 ## Twenty-four-hour day-ahead scheduling
 
