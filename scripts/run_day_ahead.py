@@ -89,7 +89,7 @@ def _write_figures(output: Path, instance, reference_rows, quantum_rows) -> list
     axes[0].plot(hours, reserve_target, color="#b23a48", linestyle="--", linewidth=1.6, label="load + reserve")
     axes[0].fill_between(hours, demand, reserve_target, color="#b23a48", alpha=0.12)
     axes[0].set_ylabel("MW")
-    axes[0].set_title("MATPOWER five-bus 24-hour day-ahead load profile")
+    axes[0].set_title("PJM five-bus 24-hour day-ahead load profile")
     axes[0].grid(axis="y", alpha=0.25)
     axes[0].legend(frameon=False, ncol=2)
 

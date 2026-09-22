@@ -34,7 +34,7 @@ from typing import Any, Sequence
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from case5_unit_commitment.qaoa.qaoa import QAOA  # noqa: E402
@@ -127,7 +127,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--output",
         type=Path,
-        default=ROOT / "results" / "unit_commitment" / "runtime_fakebackend_rehearsal",
+        default=ROOT / "results" / "runtime_fakebackend",
     )
     return parser
 
