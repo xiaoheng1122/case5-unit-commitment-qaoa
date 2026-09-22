@@ -269,8 +269,8 @@ audited independently.
 3. L. Zhou *et al.*, “Quantum Approximate Optimization Algorithm:
    Performance, Mechanism, and Implementation on Near-Term Devices,” *Physical
    Review X*, 10, 021067, 2020.
-4. The PJM five-bus benchmark parameters distributed in the public MATPOWER
-   `case5` data set; the values are embedded locally and no MATLAB/MATPOWER
+4. The standard PJM five-bus benchmark data used in this study; all numerical
+   values are embedded locally, so no external power-system package or MATLAB
    runtime is required.
 5. Origin Quantum, [QPanda3 documentation](https://github.com/OriginQ/QPanda3-doc).
 
