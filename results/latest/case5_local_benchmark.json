@@ -1,0 +1,309 @@
+{
+  "schema_version": "case5_local_benchmark_v1",
+  "scope": {
+    "real_qpu_submitted": false,
+    "remote_quantum_task_submitted": false,
+    "execution_environment": "local CPUQVM"
+  },
+  "case": {
+    "name": "case5",
+    "source_url": "https://github.com/MATPOWER/matpower/blob/master/data/case5.m",
+    "time_periods": 2,
+    "demand_mw": [
+      800.0,
+      1000.0
+    ],
+    "reserve_mw": [
+      0.0,
+      0.0
+    ]
+  },
+  "classical_reference": {
+    "success": true,
+    "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "solver": "scipy.optimize.milp",
+    "commitments": [
+      [
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        0,
+        1
+      ]
+    ],
+    "objective": 28439.307373799667,
+    "schedule": {
+      "success": true,
+      "method": "linprog",
+      "total_cost": 28439.30737379966,
+      "commitment_cost": 58.0,
+      "variable_cost": 28381.30737379966,
+      "message": "optimal dispatch found for every period",
+      "dispatch": [
+        {
+          "method": "linprog",
+          "success": true,
+          "generation_mw": [
+            40.0,
+            170.0,
+            94.57052242093204,
+            0.0,
+            495.4294775790679
+          ],
+          "variable_cost": 10901.41044841864,
+          "fixed_cost": 12.0,
+          "total_cost": 10913.41044841864,
+          "branch_flows_mw": [
+            284.7304202272928,
+            180.6990573517752,
+            -255.42947757906788,
+            44.73042022729285,
+            -100.69905735177521,
+            -240.00000000000003
+          ],
+          "equality_residual_mw": 0.0,
+          "max_line_violation_mw": 2.842170943040401e-14,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+        },
+        {
+          "method": "linprog",
+          "success": true,
+          "generation_mw": [
+            40.0,
+            170.0,
+            323.4948462690512,
+            0.0,
+            466.5051537309486
+          ],
+          "variable_cost": 17479.89692538102,
+          "fixed_cost": 12.0,
+          "total_cost": 17491.89692538102,
+          "branch_flows_mw": [
+            249.71676504272753,
+            186.78838868822132,
+            -226.50515373094868,
+            -50.283234957272455,
+            -26.788388688221275,
+            -239.99999999999997
+          ],
+          "equality_residual_mw": -2.2737367544323206e-13,
+          "max_line_violation_mw": 0.0,
+          "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+        }
+      ]
+    }
+  },
+  "runs": [
+    {
+      "backend": "statevector",
+      "execution_environment": "local ideal CPUQVM",
+      "noise_stage": "none",
+      "logical_qubits": 10,
+      "shots": -1,
+      "feasible_probability": 0.15362363478956112,
+      "best_cost": 28573.552686237796,
+      "parameters": [
+        -3744.0991465748175,
+        -2.885266990063972
+      ],
+      "loss": 6859.350757209993,
+      "best_candidate": {
+        "bitstring": "1111101110",
+        "probability": 0.002983683351449616,
+        "commitments": [
+          [
+            0,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        ],
+        "committed_capacity_mw": [
+          970.0,
+          1530.0
+        ],
+        "capacity_feasible": true,
+        "qubo_energy": 6196.69000000001,
+        "physically_feasible": true,
+        "schedule": {
+          "success": true,
+          "method": "linprog",
+          "total_cost": 28573.552686237796,
+          "commitment_cost": 69.0,
+          "variable_cost": 28504.552686237796,
+          "message": "optimal dispatch found for every period",
+          "dispatch": [
+            {
+              "method": "linprog",
+              "success": true,
+              "generation_mw": [
+                0.0,
+                170.0,
+                0.0,
+                72.48852536189241,
+                557.5114746381076
+              ],
+              "variable_cost": 11024.655760856773,
+              "fixed_cost": 9.0,
+              "total_cost": 11033.655760856773,
+              "branch_flows_mw": [
+                319.882311404025,
+                167.62916323408263,
+                -317.5114746381076,
+                79.88231140402507,
+                -160.11768859597507,
+                -240.00000000000003
+              ],
+              "equality_residual_mw": 0.0,
+              "max_line_violation_mw": 2.842170943040401e-14,
+              "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+            },
+            {
+              "method": "linprog",
+              "success": true,
+              "generation_mw": [
+                40.0,
+                170.0,
+                323.4948462690512,
+                0.0,
+                466.5051537309486
+              ],
+              "variable_cost": 17479.89692538102,
+              "fixed_cost": 16.0,
+              "total_cost": 17495.89692538102,
+              "branch_flows_mw": [
+                249.71676504272753,
+                186.78838868822132,
+                -226.50515373094868,
+                -50.283234957272455,
+                -26.788388688221275,
+                -239.99999999999997
+              ],
+              "equality_residual_mw": -2.2737367544323206e-13,
+              "max_line_violation_mw": 0.0,
+              "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+            }
+          ]
+        }
+      },
+      "gap_percent": 0.47204142728810583
+    },
+    {
+      "backend": "local_noisy",
+      "execution_environment": "local noisy CPUQVM",
+      "noise_stage": "synthetic gate and readout noise plus finite shots",
+      "logical_qubits": 10,
+      "shots": 256,
+      "feasible_probability": 0.12109375,
+      "best_cost": 28569.018935121527,
+      "parameters": [
+        39464776.24633424,
+        949575.741183581
+      ],
+      "loss": 7773.151679687497,
+      "best_candidate": {
+        "bitstring": "1101101101",
+        "probability": 0.00390625,
+        "commitments": [
+          [
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            1,
+            1,
+            0,
+            1
+          ]
+        ],
+        "committed_capacity_mw": [
+          1010.0,
+          1290.0
+        ],
+        "capacity_feasible": true,
+        "qubo_energy": 2564.6500000000015,
+        "physically_feasible": true,
+        "schedule": {
+          "success": true,
+          "method": "linprog",
+          "total_cost": 28569.018935121527,
+          "commitment_cost": 65.0,
+          "variable_cost": 28504.018935121527,
+          "message": "optimal dispatch found for every period",
+          "dispatch": [
+            {
+              "method": "linprog",
+              "success": true,
+              "generation_mw": [
+                40.0,
+                170.0,
+                0.0,
+                63.16758856066845,
+                526.8324114393315
+              ],
+              "variable_cost": 10905.027656820053,
+              "fixed_cost": 11.0,
+              "total_cost": 10916.027656820053,
+              "branch_flows_mw": [
+                322.7444980581382,
+                174.0879133811934,
+                -286.83241143933145,
+                82.74449805813829,
+                -157.25550194186184,
+                -240.0
+              ],
+              "equality_residual_mw": 0.0,
+              "max_line_violation_mw": 0.0,
+              "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+            },
+            {
+              "method": "linprog",
+              "success": true,
+              "generation_mw": [
+                0.0,
+                170.0,
+                337.4495639150736,
+                0.0,
+                492.5504360849264
+              ],
+              "variable_cost": 17598.991278301473,
+              "fixed_cost": 10.0,
+              "total_cost": 17608.991278301473,
+              "branch_flows_mw": [
+                241.24526473438465,
+                181.3051713505418,
+                -252.55043608492645,
+                -58.75473526561535,
+                -21.305171350541784,
+                -240.0
+              ],
+              "equality_residual_mw": 0.0,
+              "max_line_violation_mw": 0.0,
+              "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+            }
+          ]
+        }
+      },
+      "gap_percent": 0.45609957942001866
+    }
+  ]
+}

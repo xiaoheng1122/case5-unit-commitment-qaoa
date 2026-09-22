@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If this repository is useful, please cite the project and the upstream methods listed in README.md."
+title: "Noisy QAOA for IEEE Five-Bus Unit Commitment"
+version: 0.1.0
+type: software
+authors:
+  - name: "Project contributors"
+license: Apache-2.0
+repository-code: https://github.com/xiaoheng1122/case5-unit-commitment-qaoa
+keywords:
+  - quantum approximate optimization algorithm
+  - unit commitment
+  - economic dispatch
+  - pyqpanda3
+  - fake backend
