@@ -109,6 +109,10 @@ state-vector QAOA comparison:
 python scripts\run_day_ahead.py --output results\day_ahead
 ```
 
+The driver resolves the local `src` directory from its own file location, so it
+can be launched from PyCharm or another working directory without setting
+`PYTHONPATH` manually.
+
 The command writes a JSON record, a load/dispatch figure, and a per-hour cost
 comparison. The reproducible Notebook walkthrough is
 `notebooks/case5_day_ahead_workflow.ipynb`.

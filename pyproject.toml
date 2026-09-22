@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "case5-unit-commitment-qaoa"
 version = "0.1.0"
-description = "Noisy QAOA and classical dispatch comparison for the MATPOWER five-bus unit-commitment benchmark"
+description = "QAOA-based day-ahead unit commitment and economic dispatch on the PJM five-bus benchmark"
 requires-python = ">=3.10"
 dependencies = [
   "numpy>=1.24",
