@@ -92,6 +92,11 @@ SymPy, and pyqpanda3; Matplotlib and pytest are development extras.
 python -m pip install -e ".[dev]"
 ```
 
+When running the Notebook in PyCharm, select the same project interpreter and
+run the installation command in PyCharm's Terminal. The import cell searches
+the current directory and its parents for `src/case5_unit_commitment`, so the
+Notebook also works when PyCharm starts it from the `notebooks` directory.
+
 The optional Runtime rehearsal additionally needs the OriginQ
 `qpanda3_runtime` package available in the local environment.
 
