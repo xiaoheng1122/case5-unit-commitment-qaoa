@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560" role="img" aria-labelledby="title desc">
   <title id="title">Five-bus active-power benchmark network</title>
-  <desc id="desc">One-line diagram of the MATPOWER case5 network with five buses, five generators, three loads, six branches, and finite limits on branches 1-2 and 4-5.</desc>
+  <desc id="desc">One-line diagram of the PJM five-bus benchmark with five buses, five generators, three loads, six branches, and finite limits on branches 1-2 and 4-5.</desc>
   <defs>
     <marker id="load-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
       <path d="M0,0 L0,6 L7,3 z" fill="#b23a48"/>
@@ -8,7 +8,7 @@
   </defs>
   <rect width="1000" height="560" fill="#ffffff"/>
   <text x="500" y="34" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#17324d">Five-bus active-power benchmark</text>
-  <text x="500" y="56" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#607d8b">MATPOWER case5 one-line representation</text>
+  <text x="500" y="56" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#607d8b">PJM five-bus one-line representation</text>
 
   <!-- transmission branches -->
   <g fill="none" stroke="#1f4e79" stroke-width="3.5" stroke-linecap="round">
@@ -92,6 +92,6 @@
     <text x="140" y="552" fill="#37474f">unlimited-rate branch</text>
     <path d="M355 548 H395" stroke="#b23a48" stroke-width="3.5"/>
     <text x="405" y="552" fill="#8e2938">finite branch limit</text>
-    <text x="900" y="552" text-anchor="end" fill="#607d8b">Source: public MATPOWER case5 data</text>
+    <text x="900" y="552" text-anchor="end" fill="#607d8b">Source: embedded PJM five-bus benchmark parameters</text>
   </g>
 </svg>

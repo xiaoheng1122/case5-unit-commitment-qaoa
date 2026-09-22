@@ -1,7 +1,7 @@
-# QAOA-Based Day-Ahead Unit Commitment on the MATPOWER Five-Bus System
+# QAOA-Based Day-Ahead Unit Commitment on the PJM Five-Bus System
 
 This repository is a compact, reproducible study of 24-hour unit commitment
-and economic dispatch on the MATPOWER five-bus benchmark. It combines a binary
+and economic dispatch on the standard PJM five-bus benchmark. It combines a binary
 QUBO commitment model, the QAOA implementation used by the QPanda3 ecosystem,
 and a SciPy mixed-integer/linear optimization reference. An optional OriginQ
 Runtime FakeBackend path provides a local, finite-shot rehearsal with device
@@ -14,27 +14,29 @@ available as reusable building blocks for each hourly subproblem.
 
 ## Model
 
-The MATPOWER `case5` data provide the buses, generators, branch reactances and
-thermal limits. Five generator commitment variables are used for each
-scheduling period. For a commitment bit `u_{g,t}`, the
-available capacity and demand-reserve requirement are represented by the
-normalized penalty
+The model uses the buses, generators, branch reactances, and thermal limits of
+the standard PJM five-bus benchmark. The numerical parameters are embedded as
+ordinary Python data, so no external power-system package is needed to run the
+study. Five binary generator-commitment variables are used for each
+scheduling period. For a commitment bit $u_{g,t}$, the available capacity and
+demand-reserve requirement are represented by the normalized penalty
 
-$$
-W\left(\sum_g \frac{P_g^{\max}}{S_{\rm base}}u_{g,t}
--\frac{D_t+R_t}{S_{\rm base}}\right)^2.
-$$
+```math
+W\left(\sum_g \frac{P_g^{\max}}{S_{\mathrm{base}}}u_{g,t}
+-\frac{D_t+R_t}{S_{\mathrm{base}}}\right)^2.
+```
 
 The continuous dispatch stage solves
 
-$$
-\min_{p_t}\;\sum_g(a_g p_{g,t}^2+b_g p_{g,t})
-\quad\text{subject to}\quad
-\sum_g p_{g,t}=D_t,\qquad
-P_g^{\min}u_{g,t}\le p_{g,t}\le P_g^{\max}u_{g,t},
-$$
+```math
+\begin{aligned}
+\min_{p_t}\quad &\sum_g\left(a_g p_{g,t}^{2}+b_g p_{g,t}\right)\\
+\mathrm{subject\ to}\quad &\sum_g p_{g,t}=D_t,\\
+&P_g^{\min}u_{g,t}\le p_{g,t}\le P_g^{\max}u_{g,t}.
+\end{aligned}
+```
 
-and the DC branch-flow limits of the five-bus network.  The reference solves
+It also enforces the DC branch-flow limits of the five-bus network. The reference solves
 the commitment and dispatch constraints jointly with
 `scipy.optimize.milp` and evaluates the resulting dispatch with
 `scipy.optimize.linprog` (or `SLSQP` when quadratic generation costs are
@@ -42,9 +44,29 @@ retained). The day-ahead reference contains 24 periods. Its local QAOA
 comparison solves one five-bit commitment QUBO per hour and evaluates the
 complete trajectory with the same dispatch routine.
 
-![MATPOWER five-bus topology](figures/case5_topology.svg)
+The symbols used in the equations are:
 
-The data provenance is the public [MATPOWER `case5.m` benchmark](https://github.com/MATPOWER/matpower/blob/master/data/case5.m).
+| Symbol | Meaning |
+| --- | --- |
+| $t$ | scheduling hour, from 0 to 23 |
+| $g$ | generator index, from 1 to 5 |
+| $u_{g,t}$ | binary commitment state (1 on, 0 off) |
+| $p_{g,t}$ | dispatched output of generator $g$ at hour $t$ (MW) |
+| $D_t$ | demand at hour $t$ (MW) |
+| $R_t$ | spinning-reserve requirement at hour $t$ (MW) |
+| $P_g^{\min},P_g^{\max}$ | minimum and maximum output of generator $g$ (MW) |
+| $a_g,b_g$ | variable generation-cost coefficients |
+| $F_g$ | no-load cost of generator $g$ |
+| $S_g$ | start-up cost of generator $g$ |
+| $y_{g,t}$ | binary start-up indicator for generator $g$ at hour $t$ |
+| $S_{\mathrm{base}}$ | normalization base used by the QUBO penalty (1,000 MW) |
+| $W$ | penalty weight for reserve-capacity violations |
+
+![PJM five-bus topology](figures/case5_topology.svg)
+
+The diagram is a schematic one-line view of the PJM five-bus benchmark. The
+embedded values follow the public benchmark parameters and are used directly
+by the Python model.
 
 ## Backends and scope
 
@@ -91,28 +113,36 @@ comparison. The reproducible Notebook walkthrough is
 The repository also contains a complete 24-hour extension of the same
 five-bus model. The default profile is a normalized daily load curve with an
 overnight valley, a morning ramp, a daytime plateau, an evening peak, and a
-late-evening decline. Multiplying the profile by the 1,000 MW MATPOWER case5
+late-evening decline. Multiplying the profile by the 1,000 MW benchmark
 base load gives hourly demands between 580 MW and 1,100 MW. A 5% spinning
 reserve requirement is applied independently at each hour.
 
 For the classical reference, the commitment, start-up, reserve, network, and
 dispatch variables are solved over the whole day:
 
-$$
-\min_{u,y,p}\;\sum_{t=0}^{23}\left[
+```math
+\begin{aligned}
+\min_{u,y,p}\quad &\sum_{t=0}^{23}\left[
 \sum_g\left(a_g p_{g,t}^{2}+b_g p_{g,t}\right)
-+\sum_g F_g u_{g,t}+\sum_g S_g y_{g,t}\right]
-$$
++\sum_g F_g u_{g,t}+\sum_g S_g y_{g,t}\right].
+\end{aligned}
+```
 
 with hourly balance and reserve constraints
 
-$$
+```math
 \sum_g p_{g,t}=D_t,\qquad
-\sum_g P_g^{\max}u_{g,t}\ge D_t+R_t,
-$$
+\sum_g P_g^{\max}u_{g,t}\ge D_t+R_t.
+```
 
 unit limits, the start-up relation
-`y_{g,t} >= u_{g,t} - u_{g,t-1}`, and the MATPOWER DC branch-flow limits.
+```math
+y_{g,t}\ge u_{g,t}-u_{g,t-1}.
+```
+
+Here $u_{g,t}$, $y_{g,t}$, $p_{g,t}$, $D_t$, $R_t$, and the generator
+parameters have the meanings listed in the table above; the network constraint
+is the DC branch-flow limit on each transmission line.
 The implementation calls SciPy's mixed-integer optimizer for commitment and
 linear-program dispatch evaluation for the reported schedule.
 
@@ -208,8 +238,9 @@ audited independently.
 3. L. Zhou *et al.*, “Quantum Approximate Optimization Algorithm:
    Performance, Mechanism, and Implementation on Near-Term Devices,” *Physical
    Review X*, 10, 021067, 2020.
-4. MATPOWER, “case5.m,”
-   [MATPOWER data repository](https://github.com/MATPOWER/matpower/blob/master/data/case5.m).
+4. The PJM five-bus benchmark parameters distributed in the public MATPOWER
+   `case5` data set; the values are embedded locally and no MATLAB/MATPOWER
+   runtime is required.
 5. Origin Quantum, [QPanda3 documentation](https://github.com/OriginQ/QPanda3-doc).
 
 ## License
