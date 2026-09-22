@@ -90,6 +90,71 @@ Open `notebooks/case5_unit_commitment_workflow.ipynb` for the derivation,
 classical reference, QAOA solution, dispatch comparison, and the offline noisy
 CPUQVM example.
 
+## Twenty-four-hour day-ahead scheduling
+
+The repository also contains a complete 24-hour extension of the same
+five-bus model. The default profile is a normalized daily load curve with an
+overnight valley, a morning ramp, a daytime plateau, an evening peak, and a
+late-evening decline. Multiplying the profile by the 1,000 MW MATPOWER case5
+base load gives hourly demands between 580 MW and 1,100 MW. A 5% spinning
+reserve requirement is applied independently at each hour.
+
+For the classical reference, the commitment, start-up, reserve, network, and
+dispatch variables are solved over the whole day:
+
+$$
+\min_{u,y,p}\;\sum_{t=0}^{23}\left[
+\sum_g\left(a_g p_{g,t}^{2}+b_g p_{g,t}\right)
++\sum_g F_g u_{g,t}+\sum_g S_g y_{g,t}\right]
+$$
+
+with hourly balance and reserve constraints
+
+$$
+\sum_g p_{g,t}=D_t,\qquad
+\sum_g P_g^{\max}u_{g,t}\ge D_t+R_t,
+$$
+
+unit limits, the start-up relation
+`y_{g,t} >= u_{g,t} - u_{g,t-1}`, and the MATPOWER DC branch-flow limits.
+The implementation calls SciPy's mixed-integer optimizer for commitment and
+linear-program dispatch evaluation for the reported schedule.
+
+The quantum comparison is deliberately sized for local validation: it solves
+24 independent five-qubit QAOA commitment problems, one for each hour, then
+passes the complete commitment trajectory through the same 24-hour dispatch
+and network evaluator. This is a transparent decomposition rather than a
+claim that a 120-qubit state-vector circuit has been simulated. The generated
+JSON records every hourly commitment, dispatch, reserve margin, branch-flow
+check, QAOA feasibility probability, and cost.
+
+Run the complete local study from the repository root:
+
+```powershell
+python scripts\run_day_ahead.py --output results\day_ahead
+```
+
+The command writes `case5_day_ahead.json`,
+`case5_day_ahead_dispatch.png`, and `case5_day_ahead_hourly_costs.png`. With
+the default seed and a short four-iteration state-vector optimization, the
+checked local record has a classical reference cost of about `311445.95`, an
+hourly-QAOA cost of about `311504.11`, and a relative gap of `0.0187%`. These
+numbers are reproducibility records for the stated settings, not a performance
+claim for a real quantum processor. The dedicated walkthrough is available
+in `notebooks/case5_day_ahead_workflow.ipynb`.
+
+A reference record for these settings is included in
+[`results/day_ahead/`](results/day_ahead/). The finite-shot noisy record is
+kept separately in [`results/day_ahead_local_noisy/`](results/day_ahead_local_noisy/).
+
+An additional finite-shot noisy check can be reproduced with
+`--backend local_noisy --shots 128 --maxiter 2`. In the checked local run it
+returned a cost of about `311500.81`, a `0.0176%` gap, no classical fallback
+hours, and zero measured line-flow violation within numerical tolerance. The
+finite-shot noise path is stochastic, so small changes between independent
+runs are expected. This mode is a local noise model; it does not contact the
+OriginQ cloud or a real backend.
+
 An inspected Runtime FakeBackend record is included in
 [`results/runtime_fakebackend/`](results/runtime_fakebackend/).  It is clearly
 marked as a local rehearsal and contains no credential or remote task payload.

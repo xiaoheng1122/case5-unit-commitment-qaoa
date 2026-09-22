@@ -1,6 +1,7 @@
 from case5_unit_commitment import (
     Case5CommitmentQuboBuilder,
     audit_case5_qubo,
+    load_case5_day_ahead,
     load_case5_uc,
     solve_milp_uc,
 )
@@ -22,3 +23,14 @@ def test_case5_qubo_audit_has_quadratic_degree_and_stable_bit_order():
     assert report.passed
     assert report.degree == 2
     assert report.energy_identity_max_error < 1.0e-8
+
+
+def test_case5_day_ahead_reference_has_24_feasible_hours():
+    instance = load_case5_day_ahead()
+    assert instance.time_periods == 24
+    assert len(instance.demand_mw) == 24
+    result = solve_milp_uc(instance, evaluate_method="linprog", enforce_network=True)
+    assert result.success
+    assert result.schedule.success
+    assert len(result.commitments) == 24
+    assert len(result.schedule.dispatch) == 24

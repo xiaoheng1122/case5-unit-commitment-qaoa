@@ -237,7 +237,7 @@ class MatpowerCase:
 
 @dataclass(frozen=True)
 class Case5UCInstance:
-    """Two-period commitment scenario built from MATPOWER case5.
+    """Multi-period commitment scenario built from MATPOWER case5.
 
     ``demand_scales`` scales the original bus loads uniformly.  The default
     profile (0.8, 1.0) produces 800 MW and 1000 MW total demand while keeping
