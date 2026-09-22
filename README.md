@@ -194,6 +194,28 @@ An inspected Runtime FakeBackend record is included in
 [`results/runtime_fakebackend/`](results/runtime_fakebackend/).  It is clearly
 marked as a local rehearsal and contains no credential or remote task payload.
 
+## Validation snapshot
+
+The retained records make the comparison between the classical reference,
+state-vector QAOA, and the local finite-shot noise path explicit:
+
+| Check | Recorded result |
+| --- | ---: |
+| Classical 24-hour reference | 311445.95 cost units |
+| State-vector hourly QAOA | 311504.11 cost units; 0.0187% relative gap |
+| Local finite-shot noisy path | 311500.81 cost units; 0.0176% relative gap; 0 fallback hours |
+| Line-flow feasibility | No violation within the recorded numerical tolerance |
+| Source-checkout test suite | 9 passed; no `PYTHONPATH` setting required |
+
+These are local reproducibility records for the configurations documented
+above. They are not measurements from a real quantum processor. The complete
+JSON schedule, dispatch tables, and figures remain in the linked `results/`
+directories. A fresh checkout can verify the source layout with:
+
+```powershell
+python -m pytest -q tests
+```
+
 To use the Runtime FakeBackend adapter with a caller-owned key, set the key in
 the caller's environment and run:
 
